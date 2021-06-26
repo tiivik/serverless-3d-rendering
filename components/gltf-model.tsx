@@ -1,9 +1,10 @@
 import { useGLTF } from '@react-three/drei'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useEffect } from 'react'
 
 interface GLTFModelProps {
   model: string
   shadows: boolean
+  onLoaded: any
 }
 
 export default function GLTFModel(props: GLTFModelProps) {
@@ -17,6 +18,10 @@ export default function GLTFModel(props: GLTFModelProps) {
       }
     })
   }, [gltf.scene, props.shadows])
+
+  useEffect(() => {
+    props.onLoaded()
+  }, [])
 
   return <primitive object={gltf.scene} />
 }
