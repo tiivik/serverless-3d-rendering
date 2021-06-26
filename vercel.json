@@ -1,0 +1,8 @@
+{
+    "functions": {
+      "api/render.ts": {
+        "maxDuration": 30,
+        "memory": 3008
+      }
+    }
+}
