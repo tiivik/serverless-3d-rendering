@@ -2,12 +2,19 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 const chrome = require('chrome-aws-lambda')
 const puppeteer = require('puppeteer')
 
+const getAbsoluteURL = (path: string) => {
+  if (process.env.NODE_ENV === 'development') {
+    return `http://localhost:3000${path}`
+  }
+  return `https://${process.env.VERCEL_URL}${path}`
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   let {
-    query: { url }
+    query: { model }
   } = req
 
-  if (!url) return res.status(400).end(`No url provided`)
+  if (!model) return res.status(400).end(`No model provided`)
 
   let browser
 
@@ -20,13 +27,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       ignoreHTTPSErrors: true
     })
   } else {
-    browser = await puppeteer.launch()
+    browser = await puppeteer.launch({
+      headless: true
+    })
   }
 
   const page = await browser.newPage()
-  await page.setViewport({ width: 700, height: 700 })
 
-  await page.goto(url)
+  await page.setViewport({ width: 512, height: 512 })
+
+  await page.goto(getAbsoluteURL(`?model=${model}`))
 
   await page.waitForFunction('window.status === "ready"')
 
