@@ -22,7 +22,7 @@ Example:
 
 `https://serverless-3d-rendering.vercel.app?model=/DamagedHelmet.glb`
 
-### Render 2D image of 3D model
+### Render a 2D image of a 3D model
 
 `https://serverless-3d-rendering.vercel.app/api/render?model={URL}`
 
