@@ -11,7 +11,7 @@ const getAbsoluteURL = (path: string) => {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   let {
-    query: { model }
+    query: { model, pageUrl, resolution }
   } = req
 
   if (!model) return res.status(400).end(`No model provided`)
@@ -34,9 +34,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const page = await browser.newPage()
 
-  await page.setViewport({ width: 512, height: 512 })
+  if (resolution) {
+    await page.setViewport({ width: resolution, height: resolution })
+  } else {
+    await page.setViewport({ width: 512, height: 512 })
+  }
 
-  await page.goto(getAbsoluteURL(`?model=${model}`))
+  if (pageUrl) {
+    await page.goto(pageUrl)
+  } else {
+    await page.goto(getAbsoluteURL(`?model=${model}`))
+  }
 
   await page.waitForFunction('window.status === "ready"')
 
