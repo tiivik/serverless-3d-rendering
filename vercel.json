@@ -2,7 +2,7 @@
     "functions": {
       "api/render.ts": {
         "maxDuration": 10,
-        "memory": 3008
+        "memory": 1024
       }
     }
 }
